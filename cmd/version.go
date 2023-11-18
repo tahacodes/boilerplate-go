@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"os"
+	"log"
 	"runtime"
 
 	"github.com/spf13/cobra"
+	"github.com/tahacodes/go-boilerplate/configs"
 )
 
 func init() {
@@ -17,12 +18,12 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Prints out the application version.",
 	Run: func(cmd *cobra.Command, args []string) {
-		version := os.Getenv("APPLICATION_VERSION")
-		if version == "" {
-			version = "Unkown"
+		// Initiate application configs
+		if err := configs.InitConfigs(); err != nil {
+			log.Fatalf("failed to initiate application configs, %v", err)
 		}
 
-		fmt.Printf("Application version: %s\n", version)
+		fmt.Printf("Application version: %s\n", configs.Config.App.Version)
 		fmt.Printf("Go version: %s\n", runtime.Version())
 		fmt.Printf("Architecture: %s\n", runtime.GOARCH)
 		fmt.Printf("Operating system: %s\n", runtime.GOOS)
