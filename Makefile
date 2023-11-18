@@ -11,6 +11,11 @@ BINARY_PATH=./bin/application
 # Main build target
 all: clean build
 
+# Prepare development environment
+prepare:
+	$(GOMOD) tidy
+	$(GOMOD) vendor
+
 # Build the binary
 build:
 	$(GOBUILD) -o $(BINARY_PATH) .
@@ -23,11 +28,6 @@ clean:
 # Run tests
 test:
 	$(GOTEST) ./...
-
-# Prepare development environment
-deps:
-	$(GOMOD) tidy
-	$(GOMOD) vendor
 
 # Run the binary
 run:
