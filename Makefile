@@ -9,7 +9,7 @@ GOMOD=$(GOCMD) mod
 BINARY_PATH=./bin/application
 
 # Main build target
-all: clean build
+all: clean prepare build
 
 # Prepare development environment
 prepare:
