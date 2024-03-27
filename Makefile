@@ -31,4 +31,8 @@ test:
 
 # Run the binary
 run:
-	$(BINARY_PATH)
+	$(BINARY_PATH) $(filter-out $@,$(MAKECMDGOALS))
+
+# Catch anything else and do nothing
+%:
+	@:
