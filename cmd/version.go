@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 	"runtime"
+	"text/tabwriter"
 
 	"github.com/spf13/cobra"
 	"github.com/tahacodes/go-boilerplate/configs"
@@ -16,16 +18,18 @@ func init() {
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Prints out the application version.",
+	Short: "Prints out the application version and runtime specifications.",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Initiate application configs
 		if err := configs.InitConfigs(); err != nil {
 			log.Fatalf("failed to initiate application configs, %v", err)
 		}
 
-		fmt.Printf("Application version: %s\n", configs.Config.App.Version)
-		fmt.Printf("Go version: %s\n", runtime.Version())
-		fmt.Printf("Architecture: %s\n", runtime.GOARCH)
-		fmt.Printf("Operating system: %s\n", runtime.GOOS)
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', 0)
+		fmt.Fprintf(w, "Version:\t%s\n", configs.Config.App.Version)
+		fmt.Fprintf(w, "Go version:\t%s\n", runtime.Version())
+		fmt.Fprintf(w, "Architecture:\t%s\n", runtime.GOARCH)
+		fmt.Fprintf(w, "Operating system:\t%s\n", runtime.GOOS)
+		w.Flush()
 	},
 }
