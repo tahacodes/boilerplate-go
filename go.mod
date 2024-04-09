@@ -1,6 +1,6 @@
 module github.com/tahacodes/go-boilerplate
 
-go 1.21.4
+go 1.22.2
 
 require (
 	github.com/spf13/cobra v1.8.0
