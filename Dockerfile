@@ -1,6 +1,6 @@
 # Build stage
 
-FROM golang:1.21.4-alpine3.18 AS builder
+FROM golang:1.22.2-alpine3.19 AS builder
 
 ENV GOOS=linux
 ENV CGO_ENABLED=0
@@ -13,7 +13,7 @@ RUN make all
 
 # Final stage
 
-FROM alpine:3.18
+FROM alpine:3.19
 
 WORKDIR /app
 COPY --from=builder /app/bin/application .
