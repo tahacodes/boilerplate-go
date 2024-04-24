@@ -1,29 +1,27 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
-	"github.com/tahacodes/go-boilerplate/configs"
+	"github.com/spf13/cobra"
 )
 
-func Execute() {
-	// Shutdown gracefully.
-	defer close()
-
-	// Starting point of the application
-	log.Println("Starting the application...")
-
-	// Initiate application configs
-	if err := configs.InitConfigs(); err != nil {
-		log.Fatalf("failed to initiate application configs, %v", err)
-	}
+// rootCmd represents the base command when called without any subcommands
+var rootCmd = &cobra.Command{
+	Use:   "root",
+	Short: "The root command of the application",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Visit: t.ly/xzLR")
+	},
 }
 
-func close() {
-	// Terminating the application. Here's some recommendations
-	// Deregister your app from service discovery if needed
-	// Stop accepting or executing new jobs or requests
-	// Close any stateful databases and external connections
-	// Allow currently running requests, jobs or goroutines to complete their process.
-	log.Printf("Shutting down...")
+func Execute() {
+	// Disable automatic generation of the help subcommand
+	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
+
+	err := rootCmd.Execute()
+	if err != nil {
+		os.Exit(1)
+	}
 }
