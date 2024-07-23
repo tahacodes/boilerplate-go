@@ -1,10 +1,10 @@
-module github.com/tahacodes/go-boilerplate
+module github.com/tahacodes/boilerplate-go
 
-go 1.22.2
+go 1.22.5
 
 require (
 	github.com/ilyakaznacheev/cleanenv v1.5.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	go.uber.org/multierr v1.11.0
 )
 
