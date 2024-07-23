@@ -1,22 +1,25 @@
-# Build stage
+# Build
 
-FROM golang:1.22.2-alpine3.19 AS builder
+FROM golang:1.22.5-alpine AS build
 
 ENV GOOS=linux
+ENV GOARCH=amd64
 ENV CGO_ENABLED=0
 
-WORKDIR /app
+WORKDIR /opt
+
 COPY . .
-RUN apk add --no-cache make
-RUN make prepare
-RUN make all
 
-# Final stage
+RUN go build -a -o ./service
 
-FROM alpine:3.19
+# Final
 
-WORKDIR /app
-COPY --from=builder /app/bin/application .
-ENV PATH="/app:${PATH}"
+FROM alpine
 
-ENTRYPOINT ["application"]
+WORKDIR /opt
+
+COPY --from=build /opt/bin/service .
+
+ENV PATH="/opt:${PATH}"
+
+ENTRYPOINT ["service"]
