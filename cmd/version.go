@@ -8,7 +8,7 @@ import (
 	"text/tabwriter"
 
 	"github.com/spf13/cobra"
-	"github.com/tahacodes/go-boilerplate/configs"
+	"github.com/tahacodes/boilerplate-go/configs"
 )
 
 func init() {
