@@ -1,28 +1,35 @@
 package configs
 
 import (
+	"log"
+
 	"github.com/ilyakaznacheev/cleanenv"
 	"go.uber.org/multierr"
 )
 
-type Configuration struct {
-	App struct {
+type Configs struct {
+	Application struct {
+		Name    string `env:"NAME"`
 		Version string `env:"VERSION" env-default:"development"`
 	} `env-prefix:"APPLICATION_"`
+
+	Log struct {
+		LogLevel  string `env:"LEVEL" env-default:"debug"`
+		SentryDSN string `env:"SENTRY_DSN"`
+	} `env-prefix:"LOG_"`
 }
 
-var Config *Configuration
+// Global configs
+var C Configs
 
-func InitConfigs() error {
-	configuration := &Configuration{}
+func init() {
+	configs := &Configs{}
 
-	if errConfig := cleanenv.ReadConfig(".env", configuration); errConfig != nil {
-		if errEnv := cleanenv.ReadEnv(configuration); errEnv != nil {
-			return multierr.Combine(errConfig, errEnv)
+	if errConfig := cleanenv.ReadConfig(".env", configs); errConfig != nil {
+		if errEnv := cleanenv.ReadEnv(configs); errEnv != nil {
+			log.Fatal(multierr.Combine(errConfig, errEnv))
 		}
 	}
 
-	Config = configuration
-
-	return nil
+	C = *configs
 }
