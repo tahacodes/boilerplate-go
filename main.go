@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -12,6 +11,7 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/tahacodes/boilerplate-go/configs"
 	"github.com/tahacodes/boilerplate-go/internal/platform/application"
+	"go.uber.org/automaxprocs/maxprocs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -22,14 +22,14 @@ func init() {
 		Dsn: configs.C.Log.SentryDSN,
 	})
 	if err != nil {
-		log.Fatal(fmt.Errorf("failed to initiate sentry"))
+		zap.L().Error("failed to initiate sentry", zap.Error(err))
 	}
 
 	// Initialize zap logger
 	level := zap.NewAtomicLevel()
 	err = level.UnmarshalText([]byte(configs.C.Log.LogLevel))
 	if err != nil {
-		log.Fatal(fmt.Errorf("failed to set log level"))
+		zap.L().Fatal("failed to set log level", zap.Error(err))
 	}
 
 	encoder := zap.NewProductionEncoderConfig()
@@ -53,10 +53,17 @@ func init() {
 		return nil
 	}))
 	if err != nil {
-		log.Fatal(fmt.Errorf("failed to set zap config"))
+		zap.L().Fatal("failed to set zap config", zap.Error(err))
 	}
 
+	// Set the current zap logger to be the global logger
 	zap.ReplaceGlobals(logger)
+
+	// Set GOMAXPROCS
+	_, err = maxprocs.Set(maxprocs.Logger(zap.S().Infof))
+	if err != nil {
+		zap.L().Error("failed to set GOMAXPROCS", zap.Error(err))
+	}
 }
 
 func main() {
