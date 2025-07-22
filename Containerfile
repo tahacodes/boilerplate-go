@@ -1,12 +1,12 @@
 # Build
 
-FROM golang:1.22.5-alpine AS build
+FROM golang:alpine AS build
 
 ENV GOOS=linux
 ENV GOARCH=amd64
 ENV CGO_ENABLED=0
 
-WORKDIR /opt
+WORKDIR /source
 
 COPY . .
 
@@ -16,10 +16,10 @@ RUN go build -a -o ./service
 
 FROM alpine
 
-WORKDIR /opt
+WORKDIR /
 
-COPY --from=build /opt/bin/service .
+COPY --from=build /source/service /usr/local/bin/service
 
-ENV PATH="/opt:${PATH}"
+ENV PATH="/usr/local/bin:${PATH}"
 
 ENTRYPOINT ["service"]
