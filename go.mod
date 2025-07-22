@@ -1,11 +1,11 @@
 module github.com/tahacodes/boilerplate-go
 
-go 1.22.5
+go 1.24.5
 
 require (
-	github.com/getsentry/sentry-go v0.28.1
+	github.com/getsentry/sentry-go v0.34.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
-	go.uber.org/automaxprocs v1.5.3
+	go.uber.org/automaxprocs v1.6.0
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.27.0
 )
