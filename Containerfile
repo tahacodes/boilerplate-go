@@ -1,6 +1,6 @@
 # Build
 
-FROM golang:alpine AS build
+FROM golang:1.24.5 AS build
 
 ENV GOOS=linux
 ENV GOARCH=amd64
@@ -10,11 +10,12 @@ WORKDIR /source
 
 COPY . .
 
+RUN go mod download
 RUN go build -a -o ./service
 
 # Final
 
-FROM alpine
+FROM gcr.io/distroless/static-debian12
 
 WORKDIR /
 
